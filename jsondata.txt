@@ -1,0 +1,12 @@
+month
+num
+link [empty]
+year
+news [empty]
+safe_title
+trancript
+  Title text
+alt
+img
+title
+day

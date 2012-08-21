@@ -1,19 +1,35 @@
 #! /usr/bin/env ruby
 
+require 'date'
 require 'net/http'
 require 'uri'
+require 'json'
 
-uri = URI.parse "http://xkcd.com/"
+number = 614
+
+uri = URI.parse "http://xkcd.com/#{number}/info.0.json"
 http = Net::HTTP.new(uri.host, uri.port)
-
 request = Net::HTTP::Get.new uri.request_uri
-request["Accept"] = "*/*"
-
 response = http.request request
 
-response["content-type"]
+xkcdjson = JSON.parse response.body
+#puts body["transcript"]
 
-response.each_header do |key, value|
-  p "#{key} => #{value}"
-end
+output = "{{comic
+| number    = #{xkcdjson["num"]}
+| date      = #{Date::MONTHNAMES[xkcdjson["month"].to_i]} #{xkcdjson["day"]}, #{xkcdjson["year"]}
+| title     = #{xkcdjson["title"]}
+| image     = 
+| imagesize = 
+| titletext = #{xkcdjson["alt"]}
+}}
 
+==Explanation==
+
+
+==Transcript==
+#{xkcdjson["transcript"]}
+
+{{comicdiscussion}}"
+
+File.open("#{xkcdjson["num"]}.txt", 'w') { |f| f.write output }
