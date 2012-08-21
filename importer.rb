@@ -12,15 +12,16 @@ def parse_transcript(text)
   text.chomp!
 end
 
-number = 1031
+ARGV.each do |arg|
+  number = arg
 
-uri = URI.parse "http://xkcd.com/#{number}/info.0.json"
-http = Net::HTTP.new(uri.host, uri.port)
-request = Net::HTTP::Get.new uri.request_uri
-response = http.request request
+  uri = URI.parse "http://xkcd.com/#{number}/info.0.json"
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Get.new uri.request_uri
+  response = http.request request
 
-xkcdjson = JSON.parse response.body
-#puts xkcdjson["transcript"]
+  xkcdjson = JSON.parse response.body
+  #puts xkcdjson["transcript"]
 
 output = "#REDIRECT [[#{xkcdjson["num"]}: #{xkcdjson["title"]}]]
 
@@ -41,4 +42,8 @@ output = "#REDIRECT [[#{xkcdjson["num"]}: #{xkcdjson["title"]}]]
 
 {{comicdiscussion}}"
 
-File.open("#{xkcdjson["num"]}.txt", 'w') { |f| f.write output }
+  File.open("#{xkcdjson["num"]}.txt", 'w') do |f|
+    f.write output
+    #f.close
+  end
+end
