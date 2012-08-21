@@ -5,7 +5,7 @@ require 'net/http'
 require 'uri'
 require 'json'
 
-number = 614
+number = 1000
 
 uri = URI.parse "http://xkcd.com/#{number}/info.0.json"
 http = Net::HTTP.new(uri.host, uri.port)
@@ -13,13 +13,15 @@ request = Net::HTTP::Get.new uri.request_uri
 response = http.request request
 
 xkcdjson = JSON.parse response.body
-#puts body["transcript"]
+#puts xkcdjson["img"]
 
-output = "{{comic
+output = "#REDIRECT [[#{xkcdjson["num"]}: #{xkcdjson["title"]}]]
+
+{{comic
 | number    = #{xkcdjson["num"]}
 | date      = #{Date::MONTHNAMES[xkcdjson["month"].to_i]} #{xkcdjson["day"]}, #{xkcdjson["year"]}
 | title     = #{xkcdjson["title"]}
-| image     = 
+| image     = #{xkcdjson["img"].gsub(/^(.*[\/])/, '')}
 | imagesize = 
 | titletext = #{xkcdjson["alt"]}
 }}
