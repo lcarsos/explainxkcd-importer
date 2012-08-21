@@ -5,7 +5,14 @@ require 'net/http'
 require 'uri'
 require 'json'
 
-number = 1000
+def parse_transcript(text)
+  text.gsub! /(?<!\n)\n(?!\n)/, "\n\n"
+  length = text.lines("\n").to_a.length - 3
+  text = text.lines("\n").to_a[0..length].join
+  text.chomp!
+end
+
+number = 1031
 
 uri = URI.parse "http://xkcd.com/#{number}/info.0.json"
 http = Net::HTTP.new(uri.host, uri.port)
@@ -13,7 +20,7 @@ request = Net::HTTP::Get.new uri.request_uri
 response = http.request request
 
 xkcdjson = JSON.parse response.body
-#puts xkcdjson["img"]
+#puts xkcdjson["transcript"]
 
 output = "#REDIRECT [[#{xkcdjson["num"]}: #{xkcdjson["title"]}]]
 
@@ -30,7 +37,7 @@ output = "#REDIRECT [[#{xkcdjson["num"]}: #{xkcdjson["title"]}]]
 
 
 ==Transcript==
-#{xkcdjson["transcript"]}
+#{parse_transcript(xkcdjson["transcript"])}
 
 {{comicdiscussion}}"
 
