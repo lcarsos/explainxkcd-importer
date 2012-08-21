@@ -21,7 +21,15 @@ ARGV.each do |arg|
   response = http.request request
 
   xkcdjson = JSON.parse response.body
-  #puts xkcdjson["transcript"]
+  safe_name = xkcdjson["safe_title"].gsub(/[\/]/, '')
+  safe_name = safe_name.downcase
+  safe_name = safe_name.gsub(/\ /, '-')
+
+  explain_url = "http://explainxkcd.com/#{xkcdjson["year"]}/#{"%02d" % xkcdjson["month"]}/#{"%02d" % xkcdjson["day"]}/#{safe_name}/"
+  puts explain_url
+  #explainURI = URI.parse explain_url
+  #explainResponse = Net::HTTP.get_response explainURI
+  #puts explainResponse.body
 
 output = "#REDIRECT [[#{xkcdjson["num"]}: #{xkcdjson["title"]}]]
 
@@ -40,7 +48,7 @@ output = "#REDIRECT [[#{xkcdjson["num"]}: #{xkcdjson["title"]}]]
 ==Transcript==
 #{parse_transcript(xkcdjson["transcript"])}
 
-{{comicdiscussion}}"
+{{comic discussion}}"
 
   File.open("#{xkcdjson["num"]}.txt", 'w') do |f|
     f.write output
