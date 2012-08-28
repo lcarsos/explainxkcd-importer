@@ -7,9 +7,15 @@ require 'json'
 
 def parse_transcript(text)
   text.gsub! /(?<!\n)\n(?!\n)/, "\n\n"
+  text.gsub! /\[\[/, "["
+  text.gsub! /\]\]/, "]"
   length = text.lines("\n").to_a.length - 3
   text = text.lines("\n").to_a[0..length].join
   text.chomp!
+end
+
+def parse_titletext(text)
+  text.gsub /''/, "'<nowiki />'"
 end
 
 ARGV.each do |arg|
@@ -24,9 +30,10 @@ ARGV.each do |arg|
   safe_name = xkcdjson["safe_title"].gsub(/[\/]/, '')
   safe_name = safe_name.downcase
   safe_name = safe_name.gsub(/\ /, '-')
+  #puts xkcdjson["transcript"]
 
   explain_url = "http://explainxkcd.com/#{xkcdjson["year"]}/#{"%02d" % xkcdjson["month"]}/#{"%02d" % xkcdjson["day"]}/#{safe_name}/"
-  puts explain_url
+  #puts explain_url
   #explainURI = URI.parse explain_url
   #explainResponse = Net::HTTP.get_response explainURI
   #puts explainResponse.body
@@ -39,7 +46,7 @@ output = "#REDIRECT [[#{xkcdjson["num"]}: #{xkcdjson["title"]}]]
 | title     = #{xkcdjson["title"]}
 | image     = #{xkcdjson["img"].gsub(/^(.*[\/])/, '')}
 | imagesize = 
-| titletext = #{xkcdjson["alt"]}
+| titletext = #{parse_titletext xkcdjson["alt"]}
 }}
 
 ==Explanation==

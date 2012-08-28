@@ -1,0 +1,18 @@
+#REDIRECT [[859: (]]
+
+{{comic
+| number    = 859
+| date      = February 11, 2011
+| title     = (
+| image     = (.png
+| imagesize = 
+| titletext = Brains aside, I wonder how many poorly-written xkcd.com-parsing scripts will break on this title (or ;;"'<nowiki />'{<<[' this mouseover text."
+}}
+
+==Explanation==
+
+
+==Transcript==
+(An unmatched left parenthesis creates an unresolved tension that will stay with you all day.
+
+{{comic discussion}}
